@@ -1,0 +1,116 @@
+{% extends 'base.html' %} {% block head %} {% endblock %} {% block body %}
+
+<div class="container-fluid">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div
+        class="col-md-4 jumbotron"
+        style="margin-top: 40px; box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.1)"
+      >
+        {% if errors %}
+        <div class="alert alert-danger">
+          <ul>
+            {% for error in errors %}
+            <li>{{error}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        {%endif%} {% if success_msg %}
+        <div class="alert alert-success">
+          <ul>
+            <li>{{success_msg}}</li>
+          </ul>
+        </div>
+        {% endif %}
+
+        <form method="post">
+          <h4 class="text-center">REGISTER HERE!</h4>
+          <div class="form-group">
+            <label for="fname">
+              <i class="fa-regular fa-user"></i> Firstname:</label
+            >
+            <input
+              type="text"
+              name="fname"
+              class="form-control"
+              autocomplete="off"
+              autofocus
+            />
+          </div>
+          -
+          <div class="form-group">
+            <label for="sname"
+              ><i class="fa-regular fa-user"></i> Surname:</label
+            >
+            <input
+              type="text"
+              name="sname"
+              class="form-control"
+              autocomplete="off"
+              autofocus
+            />
+          </div>
+          <div class="form-group">
+            <label for="uname"
+              ><i class="fa-regular fa-user"></i> Username:</label
+            >
+            <input
+              type="text"
+              name="uname"
+              class="form-control"
+              autocomplete="off"
+              autofocus
+            />
+          </div>
+          <div class="form-group">
+            <label for="email"
+              ><i class="fa-regular fa-envelope"></i> Email:</label
+            >
+            <input
+              type--="email"
+              name="email"
+              class="form-control"
+              autocomplete="off"
+              autofocus
+            />
+          </div>
+          <div class="form-group">
+            <label for="pass"> <i class="fa-solid fa-lock"></i>Password:</label>
+            <input
+              type="password"
+              name="pass"
+              class="form-control"
+              autocomplete="off"
+              autofocus
+            />
+          </div>
+          <div class="form-group">
+            <label for="cpass"
+              ><i class="fa-solid fa-lock"></i> Confrim Password:</label
+            >
+            <input
+              type="password"
+              name="cpass"
+              class="form-control"
+              autocomplete="off"
+              autofocus
+            />
+          </div>
+          <div style="margin-top: 20px; padding: 15px">
+            <button type="submit" class="btn btn-primary">Regiter</button
+            ><a
+              href="{{url_for('login')}}"
+              style="float: right; text-decoration: none"
+              >Click here to log In</a
+            >
+          </div>
+        </form>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

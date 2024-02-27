@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block head %} {% endblock %} {% block body %}
+<div class="container">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div
+        class="col-md-8"
+        style="
+          box-shadow: 0 0.5px 1px 1px rgba(0, 0, 0.1, 0.1);
+          height: 300px;
+          margin-top: 100px;
+          background-color: whitesmoke;
+        "
+      >
+        <h2 class="text-center" style="margin-top: 35px">
+          Welcome to our new ecosystem
+        </h2>
+        <a href="{{url_for('register')}}" style="margin-top: 60px; float: left"
+          ><button class="btn btn-primary">Click Here to Register!</button></a
+        >
+        <a href="{{url_for('login')}}" style="float: right; margin-top: 60px"
+          ><button class="btn btn-success">Click Here to Log In!</button></a
+        >
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,216 @@
+{% extends 'base.html' %} {% block head%}{% endblock%} {% block body%}
+
+<div class="container-fluid">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+        <table class="table table-responsive">
+          <tr>
+            <th>#</th>
+            <th>Firstname</th>
+            <th>Surname</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+          {% for account in user_account %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            {# Display the index of the current account in the loop #}
+            <td>{{ account[1] }}</td>
+            {# Firstname #}
+            <td>{{ account[2] }}</td>
+            {# Surname #}
+            <td>{{ account[3] }}</td>
+            {# Username #}
+            <td>{{ account[4] }}</td>
+            {# Email #}
+            <td>
+              <button
+                type="button"
+                class="btn btn-primary edit-button"
+                data-toggle="modal"
+                data-target="#exampleModalCenter"
+                data-account-id="{{ account[0] }}"
+              >
+                Edit
+              </button>
+              <button
+                type="submit"
+                class="btn btn-danger delete-button"
+                data-account-id="{{ account[0] }}"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModalCenter"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Upadate Details</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post">
+          <div id="successMessage"></div>
+          <div id="errorMessage"></div>
+
+          <div class="form-group">
+            <label for="fname">Firstname</label>
+            <input type="text" name="fname" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="sname">Surname</label>
+            <input type="text" name="sname" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="uname">Username</label>
+            <input type="text" name="uname" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" name="email" class="form-control" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" id="updateButton" class="btn btn-primary">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Add this script at the end of your HTML body or include it in a separate JavaScript file -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Function to fetch account details and populate edit modal
+    function fetchAccountDetails(accountId) {
+      $.ajax({
+        url: "/edit/" + accountId,
+        type: "GET",
+        success: function (response) {
+          // Populate modal fields with account details
+          $('#exampleModalCenter input[name="fname"]').val(response.account[1]);
+          $('#exampleModalCenter input[name="sname"]').val(response.account[2]);
+          $('#exampleModalCenter input[name="uname"]').val(response.account[3]);
+          $('#exampleModalCenter input[name="email"]').val(response.account[4]);
+        },
+        error: function (xhr, status, error) {
+          console.error("Error fetching account details:", error);
+        },
+      });
+    }
+
+    $(document).ready(function () {
+      // Function to update account details
+      function updateAccountDetails(accountId) {
+        var formData = {
+          fname: $('#exampleModalCenter input[name="fname"]').val(),
+          sname: $('#exampleModalCenter input[name="sname"]').val(),
+          uname: $('#exampleModalCenter input[name="uname"]').val(),
+          email: $('#exampleModalCenter input[name="email"]').val(),
+        };
+
+        $.ajax({
+          url: "/update/" + accountId,
+          type: "POST",
+          data: formData,
+          success: function (response) {
+            if (response.success) {
+              // Display success message
+              $("#successMessage")
+                .text("Account details updated successfully")
+                .show();
+            } else {
+              // Display error message
+              $("#errorMessage")
+                .text("Error: " + response.error)
+                .show();
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error updating account details:", error);
+            $("#errorMessage")
+              .text("Error updating account details: " + error)
+              .show();
+          },
+        });
+      }
+      $(document).ready(function () {
+        function deleteAccountdetails(accountId) {
+          $.ajax({
+            url: "/delete/" + accountId,
+            method: "POST",
+            success: function (response) {
+              if (response.success) {
+                //display success message
+                alert("successfully deleted");
+              } else {
+                alert("not deleted");
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("Error deleting account:", error);
+              alert("An error occurred while deleting the account");
+            },
+          });
+        }
+
+        // Event listener for update button click
+        var currentAccountId;
+
+        $(".edit-button").click(function () {
+          currentAccountId = $(this).data("account-id");
+          fetchAccountDetails(currentAccountId);
+        });
+
+        $("#updateButton").click(function () {
+          if (currentAccountId) {
+            updateAccountDetails(currentAccountId);
+          } else {
+            console.error("Account ID is not defined.");
+          }
+        });
+        $(".delete-button").click(function () {
+          currentAccountId = $(this).data("account-id");
+          deleteAccountdetails(currentAccountId);
+        });
+      });
+    });
+  });
+</script>
+
+{%endblock%}
