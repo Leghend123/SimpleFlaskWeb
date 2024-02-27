@@ -11,7 +11,7 @@ from flask import (
 import sqlite3
 import re
 from flask_bcrypt import Bcrypt
-from create_table import db_model
+
 
 app = Flask(__name__)
 app.secret_key = "leghend123"

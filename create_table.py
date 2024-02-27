@@ -1,35 +1,27 @@
 import sqlite3
 
+def create_users_table():
+    try:
+        conn = sqlite3.connect("database.db")
+        cursor = conn.cursor()
 
-class dbmodel:
-    def __init__(self):
-        self.conn = sqlite3.connect("database.db")
-        print("connected succefully")
-
-    def users(self):
-        try:
-            self.conn.execute(
-                """
-                 CREATE TABLE IF NOT EXISTS users(
-                              id INTEGER PRIMARY KEY,
-                              firstname VARCHAR,
-                              surname  VARCHAR,
-                              username VARCHAR,
-                              email    VARCHAR,
-                              password VARCHAR
-
-                     )
-               """
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY,
+                firstname VARCHAR,
+                surname VARCHAR,
+                username VARCHAR,
+                email VARCHAR,
+                password VARCHAR
             )
-            print("Created users table successfully")
+        """)
 
-        except:
-            print(f"Error creating users table")
+        conn.commit()
+        conn.close()
+        print("Created users table successfully")
 
-    def close(self):
-        self.conn.close()
+    except Exception as e:
+        print(f"Error creating users table: {e}")
 
-
-db_model = dbmodel()
-db_model.users()
-db_model.close()
+# Call the function to create the users table
+create_users_table()
