@@ -1,5 +1,5 @@
 import sqlite3
-
+#function for creating the table 
 def create_users_table():
     try:
         conn = sqlite3.connect("database.db")
@@ -23,5 +23,5 @@ def create_users_table():
     except Exception as e:
         print(f"Error creating users table: {e}")
 
-# Call the function to create the users table
+# Calling the function to create the users table
 create_users_table()
